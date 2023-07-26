@@ -1,0 +1,55 @@
+import urllib.parse
+
+def obter_valor_parametro(url, parametro):
+    inicio_parametro = url.find(parametro)
+    if inicio_parametro == -1:
+        return None
+
+    inicio_valor = url.find('=', inicio_parametro) + 1
+    fim_valor = url.find('&', inicio_valor)
+    if fim_valor == -1:
+        fim_valor = None
+
+    valor = url[inicio_valor:fim_valor]
+    valor_decodificado = urllib.parse.unquote(valor)  # Decodifica caracteres codificados, se houver
+
+    return valor_decodificado
+
+url = "bytebank.com/cambio?quantidade=100&moedaDestino=dolar&moedaOrigem=real"
+
+parametro_moeda_destino = 'moedaDestino'
+parametro_moeda_origem = 'moedaOrigem'
+parametro_quantidade = 'quantidade'
+
+print('Qual parâmetro você deseja acessar?')
+print('Opções: Valor, Moeda Origem ou Moeda Destino')
+entrada = input('Digite sua escolha: ')
+
+entrada = entrada.lower()
+if entrada in ['valor', 'moeda origem', 'moeda destino']:
+    if entrada == 'valor':
+        valor = obter_valor_parametro(url, parametro_quantidade)
+        if valor:
+            print('Valor:', valor)
+        else:
+            print('O parâmetro "quantidade" não foi encontrado na URL.')
+    elif entrada == 'moeda origem':
+        moeda_origem = obter_valor_parametro(url, parametro_moeda_origem)
+        if moeda_origem:
+            print('Moeda Origem:', moeda_origem)
+        else:
+            print('O parâmetro "moedaOrigem" não foi encontrado na URL.')
+    elif entrada == 'moeda destino':
+        moeda_destino = obter_valor_parametro(url, parametro_moeda_destino)
+        if moeda_destino:
+            print('Moeda Destino:', moeda_destino)
+        else:
+            print('O parâmetro "moedaDestino" não foi encontrado na URL.')
+else:
+    print('Opção inválida. Escolha entre "Valor", "Moeda Origem" ou "Moeda Destino".')
+
+
+
+
+
+
